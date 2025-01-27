@@ -3,6 +3,6 @@ package data;
 import java.sql.Connection;
 
 public interface IDB {
-    String createConnection();
+    Connection getConnection();
     void closeConnection();
 }
