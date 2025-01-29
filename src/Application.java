@@ -39,6 +39,12 @@ public class Application {
                     case 6:
                         getAllTransactions();
                         break;
+                    case 7:
+                        getUserBalance();
+                        break;
+                    case 8:
+                        getTransactionsFromThisMonth();
+                        break;
                 }
             } catch (Exception e) {
                 System.out.println("Something went wrong");
@@ -54,6 +60,8 @@ public class Application {
         System.out.println("5. Delete transaction");
         System.out.println("6. Get All Transactions");
 
+        System.out.println("7. Get user balance");
+        System.out.println("8. Get transactions from this month");
     }
 
     private void addUser() {
@@ -115,6 +123,17 @@ public class Application {
         for (Transaction transaction : transactionController.getAllTransactions()) {
             System.out.println(transaction.toString() + "/n");
         }
+    }
+
+    private void getUserBalance() {
+        System.out.println("Enter user id");
+        int userId = Integer.parseInt(scanner.nextLine());
+        String result = userController.getBalance(userId);
+        System.out.println(result);
+    }
+
+    private void getTransactionsFromThisMonth() {
+        // todo
     }
 
     private void mainMenu() {

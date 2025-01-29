@@ -86,4 +86,38 @@ public class UserController implements IUserController {
 
         return null;
     }
+
+    public String getBalance(int id) {
+        Connection conn = null;
+        try {
+            conn = db.getConnection();
+            String sql = "SELECT COALESCE(SUM(t.amount), 0) AS balance, u.currency " +
+                    "FROM transactions t " +
+                    "JOIN users u ON t.user_id = u.id " +
+                    "WHERE t.user_id = ? " +
+                    "GROUP BY u.currency";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String balance = Integer.toString(rs.getInt("balance"));
+                String currency = rs.getString("currency");
+
+                switch (currency) {
+                    case "EUR":
+                        return "€" + balance;
+                    case "USD":
+                        return "$" + balance;
+                    case "KZT":
+                        return balance + " ₸";
+                    default:
+                        return balance;
+                }
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
 }

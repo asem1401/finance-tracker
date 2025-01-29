@@ -8,7 +8,7 @@ import data.IDB;
 
 public class Main {
     public static void main(String[] args) {
-        IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "postgres", "12345678", "finance-tracker");
+        IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "postgres", "1234", "finance-tracker");
         IUserController userController = new UserController(db);
         ITransactionController transactionController = new TransactionController(db);
 
