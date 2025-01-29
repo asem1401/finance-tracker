@@ -81,4 +81,23 @@ public class TransactionController implements ITransactionController{
         }
         return null;
     }
+
+    @Override
+    public List<Transaction> getTransactionsFromThisMonth() {
+        Connection conn = null;
+        try {
+            conn = db.getConnection();
+            String sql = "SELECT * FROM your_table WHERE DATE_FORMAT(your_timestamp_column, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m');";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            List<Transaction> transactions = new ArrayList<>();
+            while (rs.next()) {
+                transactions.add(getTransactionFromResultSet(rs));
+            }
+            return transactions;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 }

@@ -133,7 +133,9 @@ public class Application {
     }
 
     private void getTransactionsFromThisMonth() {
-        // todo
+        for (Transaction transaction : transactionController.getTransactionsFromThisMonth()) {
+            System.out.println(transaction.toString() + "/n");
+        }
     }
 
     private void mainMenu() {
