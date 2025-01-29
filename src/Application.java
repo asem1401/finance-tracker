@@ -1,14 +1,18 @@
 import controllers.IUserController;
+import controllers.ITransactionController;
+import models.Transaction;
 import models.User;
 
 import java.util.Scanner;
 
 public class Application {
     private final IUserController userController;
+    private final ITransactionController transactionController;
     private final Scanner scanner = new Scanner(System.in);
 
-    public Application(IUserController userController) {
+    public Application(IUserController userController, ITransactionController transactionController) {
         this.userController = userController;
+        this.transactionController = transactionController;
     }
 
     public void start() {
@@ -26,8 +30,16 @@ public class Application {
                     case 3:
                         getUserById();
                         break;
+                    case 4:
+                        addTransaction();
+                        break;
+                    case 5:
+                        deleteTransaction();
+                        break;
+                    case 6:
+                        getAllTransactions();
+                        break;
                 }
-                printOptions();
             } catch (Exception e) {
                 System.out.println("Something went wrong");
             }
@@ -38,6 +50,10 @@ public class Application {
         System.out.println("1. Add User");
         System.out.println("2. Get All Users");
         System.out.println("3. Get User By Id");
+        System.out.println("4. Add transaction");
+        System.out.println("5. Delete transaction");
+        System.out.println("6. Get All Transactions");
+
     }
 
     private void addUser() {
@@ -53,7 +69,7 @@ public class Application {
             System.out.println("User added successfully");
             System.out.println(user.toString());
         } else {
-            System.out.println(user);
+            System.out.println("Something went wrong");
         }
 
     }
@@ -68,6 +84,37 @@ public class Application {
         System.out.println("Enter id:");
         int id = Integer.parseInt(scanner.nextLine());
         System.out.println(userController.getUserById(id));
+    }
+
+    private void addTransaction() {
+        System.out.println("Please enter your amount: ");
+        int amount = Integer.parseInt(scanner.nextLine());
+        System.out.println("Which user this transaction belongs to? ");
+        int userId = Integer.parseInt(scanner.nextLine());
+        Transaction transaction = transactionController.addTransaction(userId, amount);
+        if (transaction != null) {
+            System.out.println("Transaction added successfully");
+            System.out.println(transaction.toString());
+        } else {
+            System.out.println("Something went wrong");
+        }
+    }
+
+    private void deleteTransaction() {
+        System.out.println("Please enter your transaction id: ");
+        int transactionId = Integer.parseInt(scanner.nextLine());
+        boolean status = transactionController.deleteTransaction(transactionId);
+        if (status) {
+            System.out.println("Transaction deleted successfully");
+        } else {
+            System.out.println("Something went wrong");
+        }
+    }
+
+    private void getAllTransactions() {
+        for (Transaction transaction : transactionController.getAllTransactions()) {
+            System.out.println(transaction.toString() + "/n");
+        }
     }
 
     private void mainMenu() {
