@@ -4,6 +4,10 @@ import data.IDB;
 import models.Transaction;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,8 +91,15 @@ public class TransactionController implements ITransactionController{
         Connection conn = null;
         try {
             conn = db.getConnection();
-            String sql = "SELECT * FROM your_table WHERE DATE_FORMAT(your_timestamp_column, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m');";
+
+            ZonedDateTime firstDayOfMonth = ZonedDateTime.now(ZoneId.of("UTC")).withDayOfMonth(1).toLocalDate().atStartOfDay(ZoneId.of("UTC"));
+            ZonedDateTime lastDayOfMonth = ZonedDateTime.now(ZoneId.of("UTC")).withDayOfMonth(ZonedDateTime.now(ZoneId.of("UTC")).toLocalDate().lengthOfMonth()).withHour(23).withMinute(59).withSecond(59);
+            String sql = "SELECT * FROM transactions WHERE created_at BETWEEN ? AND ?";
+
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setTimestamp(1, Timestamp.from(firstDayOfMonth.toInstant()));
+            ps.setTimestamp(2, Timestamp.from(lastDayOfMonth.toInstant()));
+
             ResultSet rs = ps.executeQuery();
             List<Transaction> transactions = new ArrayList<>();
             while (rs.next()) {
