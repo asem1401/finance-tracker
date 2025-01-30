@@ -3,6 +3,7 @@ import controllers.ITransactionController;
 import models.Transaction;
 import models.User;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Application {
@@ -72,17 +73,16 @@ public class Application {
         System.out.println("Please enter your preferred currency: ");
         String currency = scanner.nextLine();
 
-        User user = userController.addUser(name, surname, currency);
-        if (user != null) {
-            System.out.println("User added successfully");
-            System.out.println(user.toString());
-        } else {
-            System.out.println("Something went wrong");
-        }
-
+        System.out.println(userController.addUser(name, surname, currency));
     }
 
     private void getAllUsers() {
+        List<User> users = userController.getAllUsers();
+
+        if (users.isEmpty()) {
+            System.out.println("No users found");
+        }
+
         for (User user : userController.getAllUsers()) {
             System.out.println(user.toString() + "/n");
         }
@@ -120,6 +120,11 @@ public class Application {
     }
 
     private void getAllTransactions() {
+        List<Transaction> transactions = transactionController.getAllTransactions();
+        if (transactions.isEmpty()) {
+            System.out.println("No transactions found");
+        }
+
         for (Transaction transaction : transactionController.getAllTransactions()) {
             System.out.println(transaction.toString() + "/n");
         }
