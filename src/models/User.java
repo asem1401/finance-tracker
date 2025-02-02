@@ -19,6 +19,7 @@ public class User {
     public User(int id, String name, String surname, String currency, String created_at, String updated_at) {
         this(name, surname, currency);
         this.id = id;
+        this.created_at = created_at;
         this.updated_at = updated_at;
     }
 

@@ -4,7 +4,6 @@ import models.Transaction;
 import models.User;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Application {
@@ -18,24 +17,38 @@ public class Application {
     }
 
     public void start() {
-        Map<Integer, Runnable> menuActions = Map.of(
-                1, this::addUser,
-                2, this::getAllUsers,
-                3, this::getUserById,
-                4, this::addTransaction,
-                5, this::deleteTransaction,
-                6, this::getAllTransactions,
-                7, this::getUserBalance,
-                8, this::getTransactionsFromThisMonth
-        );
-
         while (true) {
             mainMenu();
             try {
                 int option = Integer.parseInt(scanner.nextLine());
-                menuActions.getOrDefault(option, this::invalidOption).run();
+                switch (option) {
+                    case 1:
+                        addUser();
+                        break;
+                    case 2:
+                        getAllUsers();
+                        break;
+                    case 3:
+                        getUserById();
+                        break;
+                    case 4:
+                        addTransaction();
+                        break;
+                    case 5:
+                        deleteTransaction();
+                        break;
+                    case 6:
+                        getAllTransactions();
+                        break;
+                    case 7:
+                        getUserBalance();
+                        break;
+                    case 8:
+                        getTransactionsFromThisMonth();
+                        break;
+                }
             } catch (Exception e) {
-                invalidOption();
+                System.out.println("Something went wrong");
             }
         }
     }
@@ -47,6 +60,7 @@ public class Application {
         System.out.println("4. Add transaction");
         System.out.println("5. Delete transaction");
         System.out.println("6. Get All Transactions");
+
         System.out.println("7. Get user balance");
         System.out.println("8. Get transactions from this month");
     }
@@ -61,7 +75,12 @@ public class Application {
 
         try {
             User user = userController.addUser(name, surname, currency);
-            System.out.println(user != null ? "User added successfully \n" + user : "Something went wrong");
+
+            if (user != null) {
+                System.out.println("User added successfully \n" + user.toString());
+            } else {
+                System.out.println("Something went wrong");
+            }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -69,16 +88,20 @@ public class Application {
 
     private void getAllUsers() {
         List<User> users = userController.getAllUsers();
+
         if (users.isEmpty()) {
             System.out.println("No users found");
-        } else {
-            users.forEach(user -> System.out.println(user.toString() + "\n"));
+        }
+
+        for (User user : userController.getAllUsers()) {
+            System.out.println(user.toString() + "/n");
         }
     }
 
     private void getUserById() {
         System.out.println("Enter id:");
         int id = Integer.parseInt(scanner.nextLine());
+
         try {
             System.out.println(userController.getUserById(id));
         } catch (IllegalArgumentException e) {
@@ -94,8 +117,13 @@ public class Application {
 
         try {
             Transaction transaction = transactionController.addTransaction(userId, amount);
-            System.out.println(transaction != null ? "Transaction added successfully" : "Something went wrong");
-            System.out.println(transaction != null ? transaction.toString() : "");
+
+            if (transaction != null) {
+                System.out.println("Transaction added successfully");
+                System.out.println(transaction.toString());
+            } else {
+                System.out.println("Something went wrong");
+            }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -107,38 +135,50 @@ public class Application {
 
         try {
             boolean status = transactionController.deleteTransaction(transactionId);
-            System.out.println(status ? "Transaction deleted successfully" : "Something went wrong");
+
+            if (status) {
+                System.out.println("Transaction deleted successfully");
+            } else {
+                System.out.println("Something went wrong");
+            }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
+
     }
 
     private void getAllTransactions() {
         List<Transaction> transactions = transactionController.getAllTransactions();
         if (transactions.isEmpty()) {
             System.out.println("No transactions found");
-        } else {
-            transactions.forEach(transaction -> System.out.println(transaction.toString() + "\n"));
+        }
+
+        for (Transaction transaction : transactions) {
+            System.out.println(transaction.toString() + "/n");
         }
     }
 
     private void getUserBalance() {
         System.out.println("Enter user id");
         int userId = Integer.parseInt(scanner.nextLine());
-        System.out.println(userController.getBalance(userId));
+
+        try {
+            String result = userController.getBalance(userId);
+            System.out.println(result);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void getTransactionsFromThisMonth() {
         List<Transaction> transactions = transactionController.getTransactionsFromThisMonth();
         if (transactions.isEmpty()) {
             System.out.println("No transactions found");
-        } else {
-            transactions.forEach(transaction -> System.out.println(transaction.toString() + "\n"));
         }
-    }
 
-    private void invalidOption() {
-        System.out.println("Invalid option. Please select a valid option from the menu.");
+        for (Transaction transaction : transactions) {
+            System.out.println(transaction.toString() + "/n");
+        }
     }
 
     private void mainMenu() {
