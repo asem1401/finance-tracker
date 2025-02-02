@@ -61,7 +61,7 @@ public class Application {
 
         try {
             User user = userController.addUser(name, surname, currency);
-            System.out.println(user != null ? "User added successfully \n" + user.toString() : "Something went wrong");
+            System.out.println(user != null ? "User added successfully \n" + user : "Something went wrong");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
