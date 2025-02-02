@@ -109,5 +109,24 @@ public class TransactionRepository implements ITransactionRepository {
         }
         return null;
     }
+
+    @Override
+    public Transaction getTransactionById(int id) {
+        Connection conn = null;
+        try {
+            conn = db.getConnection();
+            String sql = "SELECT * FROM Transactions WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return getTransactionFromResultSet(rs);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+
+    }
 }
 

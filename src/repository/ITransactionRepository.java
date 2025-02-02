@@ -9,4 +9,5 @@ public interface ITransactionRepository {
     boolean deleteTransaction(int id);
     List<Transaction> getAllTransactions();
     List<Transaction> getTransactionsFromThisMonth();
+    Transaction getTransactionById(int id);
 }

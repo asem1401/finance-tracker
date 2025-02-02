@@ -14,31 +14,40 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public String addUser(String name, String surname, String currency) {
+    public User addUser(String name, String surname, String currency) throws IllegalArgumentException{
         if (!validCurrencies.contains(currency)) {
-            return currency + " is not a valid currency.";
+            throw new IllegalArgumentException(currency + " is not a valid currency.");
         }
 
-        User user = userRepository.addUser(name, surname, currency);
-
-        if (user != null) {
-            return "User added successfully \n" + user.toString();
-        } else {
-            return "Something went wrong";
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty.");
         }
+        if (surname == null || surname.trim().isEmpty()) {
+            throw new IllegalArgumentException("Surname cannot be empty.");
+        }
+
+        return userRepository.addUser(name, surname, currency);
     }
 
     @Override
-    public User getUserById(int id) {
+    public User getUserById(int id) throws IllegalArgumentException {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Invalid user ID. Must be a positive number.");
+        }
+
         return userRepository.getUserById(id);
     }
 
     @Override
     public List<User> getAllUsers() {
+
         return userRepository.getAllUsers();
     }
 
-    public String getBalance(int id) {
+    public String getBalance(int id) throws IllegalArgumentException {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Invalid user ID. Must be a positive number.");
+        }
         return userRepository.getBalance(id);
     }
 }

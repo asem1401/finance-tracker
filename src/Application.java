@@ -73,7 +73,17 @@ public class Application {
         System.out.println("Please enter your preferred currency: ");
         String currency = scanner.nextLine();
 
-        System.out.println(userController.addUser(name, surname, currency));
+        try {
+            User user = userController.addUser(name, surname, currency);
+
+            if (user != null) {
+                System.out.println("User added successfully \n" + user.toString());
+            } else {
+                System.out.println("Something went wrong");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void getAllUsers() {
@@ -91,7 +101,12 @@ public class Application {
     private void getUserById() {
         System.out.println("Enter id:");
         int id = Integer.parseInt(scanner.nextLine());
-        System.out.println(userController.getUserById(id));
+
+        try {
+            System.out.println(userController.getUserById(id));
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void addTransaction() {
@@ -99,24 +114,37 @@ public class Application {
         int amount = Integer.parseInt(scanner.nextLine());
         System.out.println("Which user this transaction belongs to? ");
         int userId = Integer.parseInt(scanner.nextLine());
-        Transaction transaction = transactionController.addTransaction(userId, amount);
-        if (transaction != null) {
-            System.out.println("Transaction added successfully");
-            System.out.println(transaction.toString());
-        } else {
-            System.out.println("Something went wrong");
+
+        try {
+            Transaction transaction = transactionController.addTransaction(userId, amount);
+
+            if (transaction != null) {
+                System.out.println("Transaction added successfully");
+                System.out.println(transaction.toString());
+            } else {
+                System.out.println("Something went wrong");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     private void deleteTransaction() {
         System.out.println("Please enter your transaction id: ");
         int transactionId = Integer.parseInt(scanner.nextLine());
-        boolean status = transactionController.deleteTransaction(transactionId);
-        if (status) {
-            System.out.println("Transaction deleted successfully");
-        } else {
-            System.out.println("Something went wrong");
+
+        try {
+            boolean status = transactionController.deleteTransaction(transactionId);
+
+            if (status) {
+                System.out.println("Transaction deleted successfully");
+            } else {
+                System.out.println("Something went wrong");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     private void getAllTransactions() {
@@ -125,7 +153,7 @@ public class Application {
             System.out.println("No transactions found");
         }
 
-        for (Transaction transaction : transactionController.getAllTransactions()) {
+        for (Transaction transaction : transactions) {
             System.out.println(transaction.toString() + "/n");
         }
     }
@@ -133,12 +161,22 @@ public class Application {
     private void getUserBalance() {
         System.out.println("Enter user id");
         int userId = Integer.parseInt(scanner.nextLine());
-        String result = userController.getBalance(userId);
-        System.out.println(result);
+
+        try {
+            String result = userController.getBalance(userId);
+            System.out.println(result);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void getTransactionsFromThisMonth() {
-        for (Transaction transaction : transactionController.getTransactionsFromThisMonth()) {
+        List<Transaction> transactions = transactionController.getTransactionsFromThisMonth();
+        if (transactions.isEmpty()) {
+            System.out.println("No transactions found");
+        }
+
+        for (Transaction transaction : transactions) {
             System.out.println(transaction.toString() + "/n");
         }
     }
