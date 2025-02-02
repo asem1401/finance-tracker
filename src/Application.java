@@ -72,7 +72,7 @@ public class Application {
         if (users.isEmpty()) {
             System.out.println("No users found");
         } else {
-            users.forEach(user -> System.out.println(user.toString() + "\n"));
+            users.forEach(user -> System.out.println(user.toString()));
         }
     }
 
@@ -80,7 +80,8 @@ public class Application {
         System.out.println("Enter id:");
         int id = Integer.parseInt(scanner.nextLine());
         try {
-            System.out.println(userController.getUserById(id));
+            User user = userController.getUserById(id);
+            System.out.println(user != null ? user : "Something went wrong");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }

@@ -15,15 +15,17 @@ public class UserController implements IUserController {
 
     @Override
     public User addUser(String name, String surname, String currency) throws IllegalArgumentException{
-        if (!validCurrencies.contains(currency)) {
-            throw new IllegalArgumentException(currency + " is not a valid currency.");
-        }
-
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be empty.");
         }
         if (surname == null || surname.trim().isEmpty()) {
             throw new IllegalArgumentException("Surname cannot be empty.");
+        }
+        if (currency == null || currency.trim().isEmpty()) {
+            throw new IllegalArgumentException("Currency cannot be empty.");
+        }
+        if (!validCurrencies.contains(currency)) {
+            throw new IllegalArgumentException(currency + " is not a valid currency.");
         }
 
         return userRepository.addUser(name, surname, currency);
@@ -40,7 +42,6 @@ public class UserController implements IUserController {
 
     @Override
     public List<User> getAllUsers() {
-
         return userRepository.getAllUsers();
     }
 
