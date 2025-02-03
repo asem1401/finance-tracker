@@ -1,3 +1,4 @@
+import apps.AuthApplication;
 import controllers.ITransactionController;
 import controllers.IUserController;
 import controllers.TransactionController;
@@ -8,6 +9,7 @@ import repository.ITransactionRepository;
 import repository.IUserRepository;
 import repository.TransactionRepository;
 import repository.UserRepository;
+import services.AuthorizationService;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,7 +20,9 @@ public class Main {
         ITransactionRepository transactionRepository = new TransactionRepository(db);
         ITransactionController transactionController = new TransactionController(transactionRepository);
 
-        Application app = new Application(userController, transactionController);
+        AuthorizationService.getInstance().init(userController);
+
+        AuthApplication app = new AuthApplication(userController, transactionController);
         app.start();
         db.closeConnection();
     }

@@ -14,12 +14,12 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public User addUser(String name, String surname, String currency) throws IllegalArgumentException{
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be empty.");
+    public User addUser(String username, String password, String currency) throws IllegalArgumentException{
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be empty.");
         }
-        if (surname == null || surname.trim().isEmpty()) {
-            throw new IllegalArgumentException("Surname cannot be empty.");
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be empty.");
         }
         if (currency == null || currency.trim().isEmpty()) {
             throw new IllegalArgumentException("Currency cannot be empty.");
@@ -28,7 +28,7 @@ public class UserController implements IUserController {
             throw new IllegalArgumentException(currency + " is not a valid currency.");
         }
 
-        return userRepository.addUser(name, surname, currency);
+        return userRepository.addUser(username, password, currency);
     }
 
     @Override
@@ -38,6 +38,14 @@ public class UserController implements IUserController {
         }
 
         return userRepository.getUserById(id);
+    }
+
+    public User getUserByUsername(String username) throws IllegalArgumentException {
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty.");
+        }
+
+        return userRepository.getUserByUsername(username);
     }
 
     @Override

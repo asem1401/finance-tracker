@@ -10,4 +10,6 @@ public interface ITransactionRepository {
     List<Transaction> getAllTransactions();
     List<Transaction> getTransactionsFromThisMonth();
     Transaction getTransactionById(int id);
+    List<Transaction> getTransactionsByUserID(int userID);
+    List<Transaction> getTransactionsFromThisMonthByUserID(int userID);
 }

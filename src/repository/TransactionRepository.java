@@ -128,5 +128,51 @@ public class TransactionRepository implements ITransactionRepository {
         return null;
 
     }
+
+    @Override
+    public List<Transaction> getTransactionsByUserID(int userID) {
+        Connection conn = null;
+        try {
+            conn = db.getConnection();
+            String sql = "SELECT * FROM Transactions WHERE user_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+            List<Transaction> transactions = new ArrayList<>();
+            while (rs.next()) {
+                transactions.add(getTransactionFromResultSet(rs));
+            }
+            return transactions;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public List<Transaction> getTransactionsFromThisMonthByUserID(int userID) {
+        Connection conn = null;
+        try {
+            conn = db.getConnection();
+
+            ZonedDateTime firstDayOfMonth = ZonedDateTime.now(ZoneId.of("UTC")).withDayOfMonth(1).toLocalDate().atStartOfDay(ZoneId.of("UTC"));
+            ZonedDateTime lastDayOfMonth = ZonedDateTime.now(ZoneId.of("UTC")).withDayOfMonth(ZonedDateTime.now(ZoneId.of("UTC")).toLocalDate().lengthOfMonth()).withHour(23).withMinute(59).withSecond(59);
+            String sql = "SELECT * FROM transactions WHERE user_id = ? AND created_at BETWEEN ? AND ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, userID);
+            ps.setTimestamp(2, Timestamp.from(firstDayOfMonth.toInstant()));
+            ps.setTimestamp(3, Timestamp.from(lastDayOfMonth.toInstant()));
+
+            ResultSet rs = ps.executeQuery();
+            List<Transaction> transactions = new ArrayList<>();
+            while (rs.next()) {
+                transactions.add(getTransactionFromResultSet(rs));
+            }
+            return transactions;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 }
 

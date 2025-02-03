@@ -43,4 +43,22 @@ public class TransactionController implements ITransactionController{
     public List<Transaction> getTransactionsFromThisMonth() {
         return transactionRepository.getTransactionsFromThisMonth();
     }
+
+    @Override
+    public List<Transaction> getTransactionsByUserID(int userID) {
+        if (userID <= 0) {
+            throw new IllegalArgumentException("Invalid user ID. Must be a positive number.");
+        }
+
+        return transactionRepository.getTransactionsByUserID(userID);
+    }
+
+    @Override
+    public List<Transaction> getTransactionsFromThisMonthByUserID(int userID) {
+        if (userID <= 0) {
+            throw new IllegalArgumentException("Invalid user ID. Must be a positive number.");
+        }
+
+        return transactionRepository.getTransactionsFromThisMonthByUserID(userID);
+    }
 }

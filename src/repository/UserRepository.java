@@ -16,23 +16,23 @@ public class UserRepository implements IUserRepository {
 
     private User getUserFromResultSet(ResultSet rs) throws SQLException {
         return new User(rs.getInt("id"),
-                rs.getString("name"),
-                rs.getString("surname"),
+                rs.getString("username"),
+                rs.getString("password"),
                 rs.getString("currency"),
                 rs.getString("created_at"),
                 rs.getString("updated_at"));
     }
 
     @Override
-    public User addUser(String name, String surname, String currency) {
+    public User addUser(String username, String password, String currency) {
         Connection conn = null;
         try {
             conn = db.getConnection();
-            String sql = "INSERT INTO Users (name, surname, currency) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO Users (username, password, currency) VALUES (?, ?, ?)";
 
             PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            st.setString(1, name);
-            st.setString(2, surname);
+            st.setString(1, username);
+            st.setString(2, password);
             st.setString(3, currency);
 
             int rowsAffected = st.executeUpdate();
@@ -58,6 +58,23 @@ public class UserRepository implements IUserRepository {
             st.setInt(1, id);
 
             ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return getUserFromResultSet(rs);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public User getUserByUsername(String username) {
+        Connection conn = null;
+        try {
+            conn = db.getConnection();
+            String sql = "SELECT * FROM Users WHERE username = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return getUserFromResultSet(rs);
             }
@@ -110,9 +127,9 @@ public class UserRepository implements IUserRepository {
                     case "USD":
                         return "$" + balance;
                     case "KZT":
-                        return balance + " ₸";
+                        return balance + "₸";
                     case "RUB":
-                        return balance + " ₽";
+                        return balance + "₽";
                     default:
                         return balance;
                 }

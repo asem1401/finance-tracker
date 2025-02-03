@@ -2,22 +2,18 @@ package models;
 
 public class User {
     private int id;
-    private String name;
-    private String surname;
+    private String username;
+    private String password;
     private String currency;
     private String created_at; //timestamp with timezone
     private String updated_at; // timestamp with timezone
 
     public User() {}
 
-    public User(String name, String surname, String currency) {
-        this.name = name;
-        this.surname = surname;
+    public User(int id, String username, String password, String currency, String created_at, String updated_at) {
+        this.username = username;
         this.currency = currency;
-    }
-
-    public User(int id, String name, String surname, String currency, String created_at, String updated_at) {
-        this(name, surname, currency);
+        this.password = password;
         this.id = id;
         this.created_at = created_at;
         this.updated_at = updated_at;
@@ -27,22 +23,21 @@ public class User {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setPassword(String password) {
+        this.password = password;
     }
-
 
     public String getCurrency() {
         return currency;
@@ -68,8 +63,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
+                ", username='" + username + '\'' +
                 ", currency='" + currency + '\'' +
                 ", created_at='" + created_at + '\'' +
                 ", updated_at='" + updated_at + '\'' +

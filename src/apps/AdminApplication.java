@@ -1,5 +1,7 @@
-import controllers.IUserController;
+package apps;
+
 import controllers.ITransactionController;
+import controllers.IUserController;
 import models.Transaction;
 import models.User;
 
@@ -7,12 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Application {
+public class AdminApplication {
     private final IUserController userController;
     private final ITransactionController transactionController;
     private final Scanner scanner = new Scanner(System.in);
 
-    public Application(IUserController userController, ITransactionController transactionController) {
+    public AdminApplication(IUserController userController, ITransactionController transactionController) {
         this.userController = userController;
         this.transactionController = transactionController;
     }
@@ -22,11 +24,12 @@ public class Application {
                 1, this::addUser,
                 2, this::getAllUsers,
                 3, this::getUserById,
-                4, this::addTransaction,
-                5, this::deleteTransaction,
-                6, this::getAllTransactions,
-                7, this::getUserBalance,
-                8, this::getTransactionsFromThisMonth
+                4, this::deleteUserById,
+                5, this::addTransaction,
+                6, this::deleteTransaction,
+                7, this::getAllTransactions,
+                8, this::getUserBalance,
+                9, this::getTransactionsFromThisMonth
         );
 
         while (true) {
@@ -38,17 +41,6 @@ public class Application {
                 invalidOption();
             }
         }
-    }
-
-    private void printOptions() {
-        System.out.println("1. Add User");
-        System.out.println("2. Get All Users");
-        System.out.println("3. Get User By Id");
-        System.out.println("4. Add transaction");
-        System.out.println("5. Delete transaction");
-        System.out.println("6. Get All Transactions");
-        System.out.println("7. Get user balance");
-        System.out.println("8. Get transactions from this month");
     }
 
     private void addUser() {
@@ -87,6 +79,13 @@ public class Application {
         }
     }
 
+    private void deleteUserById() {
+        System.out.println("Enter id:");
+        int id = Integer.parseInt(scanner.nextLine());
+
+
+    }
+
     private void addTransaction() {
         System.out.println("Please enter your amount: ");
         int amount = Integer.parseInt(scanner.nextLine());
@@ -119,14 +118,19 @@ public class Application {
         if (transactions.isEmpty()) {
             System.out.println("No transactions found");
         } else {
-            transactions.forEach(transaction -> System.out.println(transaction.toString() + "\n"));
+            transactions.forEach(transaction -> System.out.println(transaction.toString()));
         }
     }
 
     private void getUserBalance() {
         System.out.println("Enter user id");
         int userId = Integer.parseInt(scanner.nextLine());
-        System.out.println(userController.getBalance(userId));
+
+        try {
+            System.out.println(userController.getBalance(userId));
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void getTransactionsFromThisMonth() {
@@ -134,8 +138,20 @@ public class Application {
         if (transactions.isEmpty()) {
             System.out.println("No transactions found");
         } else {
-            transactions.forEach(transaction -> System.out.println(transaction.toString() + "\n"));
+            transactions.forEach(transaction -> System.out.println(transaction.toString()));
         }
+    }
+
+    private void printOptions() {
+        System.out.println("1. Add User");
+        System.out.println("2. Get All Users");
+        System.out.println("3. Get User By Id");
+        System.out.println("4. Delete User By Id");
+        System.out.println("5. Add transaction");
+        System.out.println("6. Delete transaction by id");
+        System.out.println("7. Get All Transactions");
+        System.out.println("8. Get user balance");
+        System.out.println("9. Get transactions from this month");
     }
 
     private void invalidOption() {
@@ -143,7 +159,6 @@ public class Application {
     }
 
     private void mainMenu() {
-        System.out.println("Welcome to the Finance Tracker Application");
         printOptions();
     }
 }
