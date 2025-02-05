@@ -5,4 +5,4 @@ It allows users to record transactions, monitor their balance, and track expense
 
 Made with Java and PostgreSQL.
 
-Made by Assem Kadulbekova, Danial Seit, Aip Dilnur, Mukhammedkhanafiya Kuandyk, 
+Made by Assem Kadulbekova, Danial Seit, Aip Dilnur, Mukhammedkhanafiya Kuandyk. 
