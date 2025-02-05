@@ -12,4 +12,6 @@ public interface ITransactionRepository {
     Transaction getTransactionById(int id);
     List<Transaction> getTransactionsByUserID(int userID);
     List<Transaction> getTransactionsFromThisMonthByUserID(int userID);
+    List<Transaction> getTransactionsByCategory(String category);
+    List<Transaction> getTransactionsByCategoryAndUserID(String category, int userID);
 }

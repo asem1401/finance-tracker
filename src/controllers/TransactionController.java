@@ -22,7 +22,8 @@ public class TransactionController implements ITransactionController{
         if (category == null || category.isEmpty()) {
             throw new IllegalArgumentException("Category cannot be null.");
         }
-        return transactionRepository.addTransaction(userID, amount, category);
+
+        return transactionRepository.addTransaction(userID, amount, category.toLowerCase());
     }
 
     @Override
@@ -63,5 +64,26 @@ public class TransactionController implements ITransactionController{
         }
 
         return transactionRepository.getTransactionsFromThisMonthByUserID(userID);
+    }
+
+    @Override
+    public List<Transaction> getTransactionsByCategory(String category) {
+        if (category == null || category.isEmpty()) {
+            throw new IllegalArgumentException("Category cannot be null.");
+        }
+
+        return transactionRepository.getTransactionsByCategory(category.toLowerCase());
+    }
+
+    public List<Transaction> getTransactionsByCategoryAndUserID(String category, int userID) {
+        if (userID <= 0) {
+            throw new IllegalArgumentException("Invalid user ID. Must be a positive number.");
+        }
+
+        if (category == null || category.isEmpty()) {
+            throw new IllegalArgumentException("Category cannot be null.");
+        }
+
+        return transactionRepository.getTransactionsByCategoryAndUserID(category.toLowerCase(), userID);
     }
 }

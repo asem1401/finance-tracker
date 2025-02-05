@@ -90,7 +90,7 @@ public class AuthApplication {
                 new AdminApplication(userController, transactionController).start();
                 this.running = false;
             } else {
-                System.out.println("Something went wrong");
+                System.out.println("Incorrect admin password");
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
@@ -108,7 +108,7 @@ public class AuthApplication {
     }
 
     private void mainMenu() {
-        System.out.println("Welcome to the Finance Tracker apps.Application");
+        System.out.println("Welcome to the Finance Tracker");
         printOptions();
     }
 }

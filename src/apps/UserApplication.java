@@ -25,7 +25,8 @@ public class UserApplication {
                 1, this::addTransaction,
                 2, this::getAllMyTransactions,
                 3, this::getTransactionsFromThisMonth,
-                4, this::getMyBalance
+                4, this::getMyBalance,
+                5, this::getTransactionsFromCategory
         );
 
         while (true) {
@@ -39,7 +40,7 @@ public class UserApplication {
         }
     }
 
-    public void addTransaction() {
+    private void addTransaction() {
         System.out.println("Please enter the amount you would like to add:");
         int amount = Integer.parseInt(scanner.nextLine());
         System.out.println("Enter category");
@@ -56,7 +57,7 @@ public class UserApplication {
         }
     }
 
-    public void getAllMyTransactions() {
+    private void getAllMyTransactions() {
         try {
             User user = AuthorizationService.getInstance().getCurrentUser();
             List<Transaction> transactions = transactionController.getTransactionsByUserID(user.getId());
@@ -71,7 +72,7 @@ public class UserApplication {
         }
     }
 
-    public void getTransactionsFromThisMonth() {
+    private void getTransactionsFromThisMonth() {
         try {
             User user = AuthorizationService.getInstance().getCurrentUser();
             List<Transaction> transactions = transactionController.getTransactionsFromThisMonthByUserID(user.getId());
@@ -86,11 +87,29 @@ public class UserApplication {
         }
     }
 
-    public void getMyBalance() {
+    private void getMyBalance() {
         User user = AuthorizationService.getInstance().getCurrentUser();
 
         try {
             System.out.println(userController.getBalance(user.getId()));
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void getTransactionsFromCategory() {
+        System.out.println("Please enter the category:");
+        String category = scanner.nextLine();
+
+        try {
+            User user = AuthorizationService.getInstance().getCurrentUser();
+
+            List<Transaction> transactions = transactionController.getTransactionsByCategoryAndUserID(category, user.getId());
+            if (transactions.isEmpty()) {
+                System.out.println("No transactions found");
+            } else {
+                transactions.forEach(transaction -> System.out.println(transaction.toString()));
+            }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -101,6 +120,7 @@ public class UserApplication {
         System.out.println("2. Get all my transactions");
         System.out.println("3. Get my transactions from this month");
         System.out.println("4. Get my balance");
+        System.out.println("5. Get transactions from category");
     }
 
     private void invalidOption() {

@@ -176,5 +176,50 @@ public class TransactionRepository implements ITransactionRepository {
         }
         return null;
     }
+
+    @Override
+    public List<Transaction> getTransactionsByCategory(String category) {
+        Connection conn = null;
+
+        try {
+            conn = db.getConnection();
+            String sql = "SELECT * FROM Transactions WHERE category = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, category);
+            ResultSet rs = ps.executeQuery();
+
+            List<Transaction> transactions = new ArrayList<>();
+            while (rs.next()) {
+                transactions.add(getTransactionFromResultSet(rs));
+            }
+            return transactions;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public List<Transaction> getTransactionsByCategoryAndUserID(String category, int userID) {
+        Connection conn = null;
+
+        try {
+            conn = db.getConnection();
+            String sql = "SELECT * FROM Transactions WHERE category = ? AND user_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, category);
+            ps.setInt(2, userID);
+            ResultSet rs = ps.executeQuery();
+
+            List<Transaction> transactions = new ArrayList<>();
+            while (rs.next()) {
+                transactions.add(getTransactionFromResultSet(rs));
+            }
+            return transactions;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 }
 

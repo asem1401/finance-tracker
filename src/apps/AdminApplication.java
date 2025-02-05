@@ -29,7 +29,8 @@ public class AdminApplication {
                 6, this::deleteTransaction,
                 7, this::getAllTransactions,
                 8, this::getUserBalance,
-                9, this::getTransactionsFromThisMonth
+                9, this::getTransactionsFromThisMonth,
+                10, this::getTransactionsFromCategory
         );
 
         while (true) {
@@ -142,6 +143,22 @@ public class AdminApplication {
         }
     }
 
+    private void getTransactionsFromCategory() {
+        System.out.println("Enter category");
+        String category = scanner.nextLine();
+
+        try {
+            List<Transaction> transactions = transactionController.getTransactionsByCategory(category);
+            if (transactions.isEmpty()) {
+                System.out.println("No transactions found");
+            } else {
+                transactions.forEach(transaction -> System.out.println(transaction.toString()));
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private void printOptions() {
         System.out.println("1. Add User");
         System.out.println("2. Get All Users");
@@ -152,6 +169,7 @@ public class AdminApplication {
         System.out.println("7. Get All Transactions");
         System.out.println("8. Get user balance");
         System.out.println("9. Get transactions from this month");
+        System.out.println("10. Get transactions from category");
     }
 
     private void invalidOption() {
