@@ -4,15 +4,17 @@ public class Transaction {
     private int id;
     private int user_id;
     private int amount;
+    private String category;
     private String created_at;
     private String updated_at;
 
     public Transaction() {}
 
-    public Transaction(int id, int user_id, int amount, String created_at, String updated_at) {
+    public Transaction(int id, int user_id, int amount, String category, String created_at, String updated_at) {
         this.id = id;
         this.user_id = user_id;
         this.amount = amount;
+        this.category = category;
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
@@ -37,6 +39,14 @@ public class Transaction {
         this.amount = amount;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public String getCreated_at() {
         return created_at;
     }
@@ -59,6 +69,7 @@ public class Transaction {
                 "id=" + id +
                 ", user_id=" + user_id +
                 ", amount=" + amount +
+                ", category='" + category + '\'' +
                 ", created_at='" + created_at + '\'' +
                 ", updated_at='" + updated_at + '\'' +
                 '}';

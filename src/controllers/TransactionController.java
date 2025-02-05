@@ -12,14 +12,17 @@ public class TransactionController implements ITransactionController{
     }
 
     @Override
-    public Transaction addTransaction(int userID, int amount) throws IllegalArgumentException {
+    public Transaction addTransaction(int userID, int amount, String category) throws IllegalArgumentException {
         if (userID <= 0) {
             throw new IllegalArgumentException("Invalid user ID. Must be a positive number.");
         }
         if (amount == 0) {
             throw new IllegalArgumentException("Transaction amount cannot be zero.");
         }
-        return transactionRepository.addTransaction(userID, amount);
+        if (category == null || category.isEmpty()) {
+            throw new IllegalArgumentException("Category cannot be null.");
+        }
+        return transactionRepository.addTransaction(userID, amount, category);
     }
 
     @Override

@@ -20,19 +20,21 @@ public class TransactionRepository implements ITransactionRepository {
         return new Transaction(rs.getInt("id"),
                 rs.getInt("user_id"),
                 rs.getInt("amount"),
+                rs.getString("category"),
                 rs.getString("created_at"),
                 rs.getString("updated_at"));
     }
 
     @Override
-    public Transaction addTransaction(int userID, int amount) {
+    public Transaction addTransaction(int userID, int amount, String category) {
         Connection conn = null;
         try {
             conn = db.getConnection();
-            String sql = "INSERT INTO Transactions (user_id, amount) VALUES (?, ?)";
+            String sql = "INSERT INTO Transactions (user_id, amount, category) VALUES (?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, userID);
             ps.setInt(2, amount);
+            ps.setString(3, category);
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {

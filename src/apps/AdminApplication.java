@@ -44,15 +44,15 @@ public class AdminApplication {
     }
 
     private void addUser() {
-        System.out.println("Please enter your name: ");
-        String name = scanner.nextLine();
-        System.out.println("Please enter your surname: ");
-        String surname = scanner.nextLine();
+        System.out.println("Please enter username");
+        String username = scanner.nextLine();
+        System.out.println("Please enter password");
+        String password = scanner.nextLine();
         System.out.println("Please enter your preferred currency: ");
         String currency = scanner.nextLine();
 
         try {
-            User user = userController.addUser(name, surname, currency);
+            User user = userController.addUser(username, password, currency);
             System.out.println(user != null ? "User added successfully \n" + user.toString() : "Something went wrong");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
@@ -82,8 +82,6 @@ public class AdminApplication {
     private void deleteUserById() {
         System.out.println("Enter id:");
         int id = Integer.parseInt(scanner.nextLine());
-
-
     }
 
     private void addTransaction() {
@@ -91,9 +89,11 @@ public class AdminApplication {
         int amount = Integer.parseInt(scanner.nextLine());
         System.out.println("Which user this transaction belongs to? ");
         int userId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter category:");
+        String category = scanner.nextLine();
 
         try {
-            Transaction transaction = transactionController.addTransaction(userId, amount);
+            Transaction transaction = transactionController.addTransaction(userId, amount, category);
             System.out.println(transaction != null ? "Transaction added successfully" : "Something went wrong");
             System.out.println(transaction != null ? transaction.toString() : "");
         } catch (IllegalArgumentException e) {

@@ -42,10 +42,12 @@ public class UserApplication {
     public void addTransaction() {
         System.out.println("Please enter the amount you would like to add:");
         int amount = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter category");
+        String category = scanner.nextLine();
 
         try {
             User user = AuthorizationService.getInstance().getCurrentUser();
-            Transaction transaction = transactionController.addTransaction(user.getId(), amount);
+            Transaction transaction = transactionController.addTransaction(user.getId(), amount, category);
 
             System.out.println(transaction != null ? "Transaction added successfully" : "Something went wrong");
             System.out.println(transaction != null ? transaction.toString() : "");
